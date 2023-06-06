@@ -1,17 +1,9 @@
 "use strict";
 
-function createNode(element) {
-  return document.createElement(element);
-}
+//
+// Variables
+//
 
-function append(parent, el) {
-  return parent.appendChild(el);
-}
-
-const tbody = document.getElementById("tbody");
-const clearButton = document.querySelector(".search__button");
-
-// data
 const url = "https://5ebbb8e5f2cfeb001697d05c.mockapi.io/users";
 let users = [];
 let filteredUsers = [];
@@ -32,14 +24,36 @@ const filters = {
   },
 };
 
-// computed
+//
+// Computed
+//
+/**
+ * Возвращает активные фильтры.
+ *
+ * @return {array}
+ */
 const activeFilters = () =>
   Object.values(filters).filter((item) => item.isActive);
 
+/**
+ * Проверка на наличие активных фильтров и поиска.
+ *
+ * @return {boolean}
+ */
 const isClearBtnShown = () => activeFilters().length > 0 || !!search;
 
+// Elements
+const tbody = document.getElementById("tbody");
+const clearButton = document.querySelector(".search__button");
+const searchField = document.getElementById("search");
+const filterBtns = document.querySelectorAll(".filter__btn");
+const paginationBlock = document.querySelector(".pagination");
+const modal = document.getElementById("modal");
+const btnCloseModal = document.getElementById("close-btn");
+const deleteUserBtn = document.getElementById("delete-user");
+
 /** 
-Get-запрос для получения списка пользователей, создание и заполнение ячеек таблицы.
+Get-запрос для получения списка пользователей. Создание и заполнение ячеек таблицы, создание пагинации.
 */
 fetch(url)
   .then((resp) => resp.json())
@@ -57,36 +71,34 @@ fetch(url)
     console.log(error);
   });
 
-const searchField = document.getElementById("search");
-searchField.addEventListener("input", (e) => {
-  searchUser(e.target.value);
-  updateTable();
-});
+//
+// Methods
+//
 
-const filterBtns = document.querySelectorAll(".filter__btn");
-filterBtns.forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    diactivateSortFilters();
-    filters[btn.id].isActive = true;
-    filters[btn.id].isIncreases = !filters[btn.id].isIncreases;
-
-    btn.classList.add("active-btn");
-    updateTable();
-  });
-});
-
-function diactivateSortFilters() {
-  Object.values(filters).forEach((filter) => {
-    filter.isActive = false;
-  });
-
-  filterBtns.forEach((filterBtn) => {
-    filterBtn.classList.remove("active-btn");
-  });
+function createNode(element) {
+  return document.createElement(element);
 }
 
+function append(parent, el) {
+  return parent.appendChild(el);
+}
+
+/**
+ * Обновление таблицы при сортировке, поиске и создании пагинации
+ */
+function updateTable() {
+  sortFilter(filteredUsers);
+  setClearBtnState();
+  createTableOfUsers(filteredUsers);
+  createPagination(filteredUsers);
+}
+/**
+ * Поиск user по имени и email.
+ *
+ * @param {string} value Значение, вводимое в поле input (searchField)
+ * @return {array} filteredUsers - массив уникальных значений
+ */
 function searchUser(value) {
-  console.log(value, "value");
   search = value;
   selectPage = 1;
 
@@ -105,6 +117,11 @@ function searchUser(value) {
   filteredUsers = [...new Set(allSearchResult)];
 }
 
+/**
+ * Сортировка по рейтингу или дате регистрации.
+ *
+ * @param {array} data Массив пользователей
+ */
 function sortFilter(data) {
   activeFilters().forEach((filter) => {
     if (filter.isIncreases) {
@@ -119,30 +136,32 @@ function sortFilter(data) {
   });
 }
 
-clearButton.addEventListener("click", (e) => {
-  diactivateSortFilters();
-  searchField.value = "";
-  filteredUsers = [...users];
-  updateTable();
-});
+/**
+ * Сброс фильтров.
+ */
+function diactivateSortFilters() {
+  Object.values(filters).forEach((filter) => {
+    filter.isActive = false;
+  });
 
-function updateTable() {
-  sortFilter(filteredUsers);
-  setClearBtnState();
-  createTableOfUsers(filteredUsers);
-  createPagination(filteredUsers);
+  filterBtns.forEach((filterBtn) => {
+    filterBtn.classList.remove("active-btn");
+  });
 }
 
+/**
+ * Показывает/скрывает кнопку "очистить фильтра" в зависимости от значения computed-свойства "isClearBtnShown"
+ */
 function setClearBtnState() {
   clearButton.style.display = isClearBtnShown() ? "flex" : "none";
 }
 
 /**
- * Пагинация
+ * Создание кнопок пагинации в зависимости от количества объектов в data
+ *
+ * @param {array} data Массив пользователей
+ * @param {number} usersOnPage Количество пользователей на одной странице
  */
-
-const paginationBlock = document.querySelector(".pagination");
-
 function createPagination(data, usersOnPage = 5) {
   clearPagination();
 
@@ -153,6 +172,9 @@ function createPagination(data, usersOnPage = 5) {
     paginationBtn.setAttribute("id", `${index + 1}`);
     append(paginationBlock, paginationBtn);
 
+    /**
+     * Убираем активный класс у всех кнопок пагинации, кроме той, что удовлетворяет условию
+     */
     function diactivatePaginationBtns() {
       paginationBlock.childNodes.forEach((el) => {
         el.classList.remove("current-pagination");
@@ -171,22 +193,35 @@ function createPagination(data, usersOnPage = 5) {
   });
 }
 
-function clearPagination() {
-  paginationBlock.innerHTML = "";
-}
-
+/**
+ * Обрезаем массив для отображения 5 users на странице
+ */
 function cutUsersByPage(data, usersOnPage = 5) {
   let start = (selectPage - 1) * usersOnPage;
   let end = start + usersOnPage;
   return data.slice(start, end);
 }
 
-const modal = document.getElementById("modal");
+/**
+ * Убираем блок с пагинацией, если на странице нет пользователей
+ */
+function clearPagination() {
+  paginationBlock.innerHTML = "";
+}
+
+/**
+ * Открытие модального окна
+ *
+ * @param {id} id пользователя, который установили при создании таблицы
+ */
 function openModal(id) {
   selectedUserId = id;
   modal.classList.add("open");
 }
 
+/**
+ * Находим индекc объекта по id и удаляем его из массива
+ */
 function removeObjectWithId(arr, id) {
   const objWithIdIndex = arr.findIndex((obj) => {
     return obj.id === id;
@@ -199,24 +234,8 @@ function removeObjectWithId(arr, id) {
   return arr;
 }
 
-const btnCloseModal = document.getElementById("close-btn");
-btnCloseModal.addEventListener("click", (e) => {
-  modal.classList.remove("open");
-  selectedUserId = null;
-});
-
-const deleteUserBtn = document.getElementById("delete-user");
-deleteUserBtn.addEventListener("click", (e) => {
-  modal.classList.remove("open");
-
-  removeObjectWithId(users, selectedUserId);
-  removeObjectWithId(filteredUsers, selectedUserId);
-
-  updateTable();
-});
-
 /**
-Helpers
+ * Создание таблицы с пользователями
  */
 function createTableOfUsers(data) {
   clearTable();
@@ -229,7 +248,6 @@ function createTableOfUsers(data) {
     let rating = createNode("td");
     let buttonDelete = createNode("button");
     buttonDelete.setAttribute("id", `${user.id}`);
-    // tr.setAttribute("id", `${user.id}`);
     name.innerHTML = `${user.username}`;
     eMail.innerHTML = `${user.email}`;
     registrationData.innerHTML = `${user.registration_date.toLocaleDateString()}`;
@@ -247,7 +265,48 @@ function createTableOfUsers(data) {
     append(tbody, tr);
   });
 }
-
+/**
+ * Очистка таблицы. Вспомогательная функция для обновления таблицы
+ */
 function clearTable() {
   tbody.innerHTML = "";
 }
+
+//
+// Inits & Event Listeners
+//
+
+searchField.addEventListener("input", (e) => {
+  searchUser(e.target.value);
+  updateTable();
+});
+
+filterBtns.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    diactivateSortFilters();
+    filters[btn.id].isActive = true;
+    filters[btn.id].isIncreases = !filters[btn.id].isIncreases;
+
+    btn.classList.add("active-btn");
+    updateTable();
+  });
+});
+
+clearButton.addEventListener("click", (e) => {
+  diactivateSortFilters();
+  searchField.value = "";
+  filteredUsers = [...users];
+  updateTable();
+});
+
+btnCloseModal.addEventListener("click", (e) => {
+  modal.classList.remove("open");
+  selectedUserId = null;
+});
+
+deleteUserBtn.addEventListener("click", (e) => {
+  modal.classList.remove("open");
+  removeObjectWithId(users, selectedUserId);
+  removeObjectWithId(filteredUsers, selectedUserId);
+  updateTable();
+});
