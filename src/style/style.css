@@ -1,0 +1,246 @@
+body {
+  background-color: #f7f7f7;
+  font-family: "Inter", sans-serif;
+  font-family: "Nunito", sans-serif;
+  font-family: "Raleway", sans-serif;
+  font-family: "Roboto", sans-serif;
+}
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 28px;
+  color: #333333;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.wrapper {
+  width: 100%;
+  max-width: 1021px;
+  margin: 0 auto;
+}
+.search {
+  /* width: 961px;'' */
+  height: 102px;
+  background-color: #ffffff;
+  border-radius: 7px;
+  box-shadow: 0px 18px 15px 0px rgba(148, 148, 148, 0.15);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 44px 16px 16px;
+}
+.search__input {
+  position: relative;
+}
+.input {
+  border: none;
+  width: calc(100% - 40px);
+  height: 34px;
+  background-color: #eceff0;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  display: block;
+  padding-left: 40px;
+}
+.input__icon {
+  position: absolute;
+  top: 5px;
+  left: 4px;
+}
+
+.search__button {
+  border: none;
+  background: none;
+  width: 142px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.button__text {
+  color: #4f4f4f;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+.filter {
+  margin-top: 70px;
+}
+.filter__list {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 237px;
+}
+.filter__text {
+  color: #9eaab4;
+  font-size: 12px;
+  font-weight: 500;
+}
+.filter__btn {
+  font-size: 12px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+.btn-text {
+  color: #9eaab4;
+  font-size: 12px;
+  font-weight: 500;
+}
+table {
+  background-color: #ffffff;
+  margin-top: 15px;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 7px;
+  height: auto;
+  /* border-spacing: 100px 50px; */
+  border-collapse: collapse;
+}
+
+/* #table-wrap table:first-child tr:first-child td:first-child {
+  color: #0cb4f1;
+} */
+table td:first-child {
+  color: #0cb4f1;
+  font-size: 12px;
+  font-weight: 700;
+}
+table th {
+  color: #9eaab4;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: inherit;
+  padding-top: 16px;
+  padding-bottom: 22px;
+  padding-left: 16px;
+}
+
+tr,
+td {
+  border-bottom: 1px solid #f7f7f7;
+}
+td {
+  padding-top: 16px;
+  padding-bottom: 22px;
+  padding-left: 16px;
+  color: #acacac;
+  font-size: 12px;
+  font-weight: 500;
+}
+.table-wrap {
+  overflow-x: auto;
+}
+
+@media (max-width: 720px) {
+  .table thead {
+    display: none;
+  }
+  .table tr {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+  .table td {
+    margin: 0 -1px -1px 0;
+    padding-top: 35px;
+    position: relative;
+    width: 50%;
+  }
+}
+@media (max-width: 480px) {
+  .table td {
+    width: 100%;
+  }
+}
+
+.btn-close {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.active-btn {
+  border-bottom: 1px dashed #333333;
+}
+.active-btn span {
+  color: #333333;
+}
+
+.pagination-container {
+  width: 100%;
+  margin-top: 20px;
+}
+.pagination {
+  text-align: center;
+}
+.pagination li {
+  display: inline-block;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.current-pagination {
+  font-weight: 700;
+  color: #0cb4f1;
+}
+.modal {
+  position: absolute;
+  z-index: 100;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 62px 23px rgba(161, 161, 161, 0.2);
+  overflow: hidden;
+}
+
+.modal__content {
+  padding: 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal__message {
+  margin-bottom: 20px;
+  color: #0cb4f1;
+  font-weight: 700;
+}
+
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
+}
+
+.modal-wrapper {
+  visibility: hidden;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+  backdrop-filter: brightness(70%);
+}
+
+.modal-wrapper.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-btn {
+  border: none;
+  padding: 10px 28px;
+  color: white;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.close-icon {
+  pointer-events: none;
+}

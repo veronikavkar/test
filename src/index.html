@@ -6,12 +6,79 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./style/reset.css">
 	<link rel="stylesheet" href="./style/style.css">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Nunito:wght@600&family=Raleway&family=Roboto:wght@400;500&display=swap"
+		rel="stylesheet">
 	<title>Список пользователей</title>
 </head>
 
 <body>
 	<div class="wrapper">
-		приветик
+		<h1 class="title">Список пользователей</h1>
+
+		<div class="search">
+			<div class="search__input">
+				<form>
+					<input type="text" class="input" id="search" placeholder="Поиск по имени или e-mail">
+				</form>
+				<img class="input__icon" src="./assets/icons/source_icon.svg" alt="">
+			</div>
+
+
+			<button class="search__button" style="display: none;">
+				<img src="./assets/icons/Vector-4.svg" style="padding-right: 6px;" alt="">
+				<span class="button__text">Очистить фильтр</span>
+			</button>
+		</div>
+
+		<div class="filter">
+			<ul class="filter__list">
+				<li>
+					<p class="filter__text">Сортировка:</p>
+				</li>
+				<li>
+					<button class="filter__btn" id="registration_date"><span class="btn-text">Дата регистрации</span></button>
+				</li>
+				<li>
+					<button class="filter__btn" id="rating"><span class="btn-text">Рейтинг</span> </button>
+				</li>
+			</ul>
+		</div>
+
+		<div iclass="table-wrap">
+			<table class="table" id="table">
+				<thead>
+					<tr>
+						<th>Имя пользователя</th>
+						<th>E-mail</th>
+						<th>Дата регистрации</th>
+						<th>Рейтинг</th>
+					</tr>
+				</thead>
+				<tbody id="tbody">
+				</tbody>
+			</table>
+		</div>
+		<div class="pagination-container">
+			<ul class="pagination">
+			</ul>
+		</div>
+		<div class="modal-wrapper" id="modal">
+			<div class="modal">
+				<div class="modal__body">
+					<div class="modal__content">
+						<div class="modal__message">
+							<p>Вы уверены, что хотите удалить пользователя?</p>
+						</div>
+						<div class="modal__buttons">
+							<button class="modal-btn" id="delete-user" style="background-color: #2E7D32;">Да</button>
+							<button class="modal-btn" id="close-btn" style="background-color: #B71C1C;">Нет</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
 	</div>
 
 
