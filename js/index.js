@@ -252,7 +252,7 @@ function createTableOfUsers(data) {
     eMail.innerHTML = `${user.email}`;
     registrationData.innerHTML = `${user.registration_date.toLocaleDateString()}`;
     rating.innerHTML = `${user.rating}`;
-    buttonDelete.innerHTML = `<img class="close-icon" src = "./assets/icons/close-icon.svg">`;
+    buttonDelete.innerHTML = `<img class="close-icon" src = "./assets/icons/close-icon.svg" />`;
     buttonDelete.classList.add("btn-close");
     buttonDelete.addEventListener("click", (e) => {
       openModal(e.target.id);
